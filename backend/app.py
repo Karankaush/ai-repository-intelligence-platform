@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from database.mongodb import db
 
 app = FastAPI(
     title="AI Repository Intelligence Platform",
@@ -11,8 +12,16 @@ async def home():
 
 
 
-@app.get('/health')
+@app.get("/health")
 async def health():
-    return{
-        "status" : 'healthy'
-    }
+    try:
+        await db.command("ping")
+        return {
+            "status": "healthy",
+            "database": "connected"
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "error": str(e)
+        }
