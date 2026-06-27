@@ -36,21 +36,3 @@ async def health():
         }
     
 
-@app.get('/token')
-async def generate_token():
-    token = create_access_token({"email" : "karan@gmail.com" ,"role" : "user"})
-    return{
-        "token" : token
-    }
-
-
-@app.get('/verify')
-async def verify_token():
-
-    token = create_access_token({"email" : "karan@gmail.com", "role" : "user"})
-    payload = verify_access_token(token)
-    return {
-        "status" : "token verified",
-        "payload" : payload
-    }
-

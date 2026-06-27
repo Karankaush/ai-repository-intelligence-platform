@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from auth.auth_service import register_user
-from auth.schemas import RegisterRequest
+from auth.auth_service import register_user, login_user
+from auth.schemas import RegisterRequest, LoginRequest
 
 router = APIRouter(
     prefix="/auth",
@@ -16,3 +16,10 @@ async def register(data: RegisterRequest):
         data.email,
         data.password
     )
+
+
+@router.post('/login')
+async def login(data : LoginRequest):
+    return await login_user(data.email, data.password)
+    
+
