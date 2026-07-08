@@ -41,3 +41,51 @@ async def get_user_repositories(user_id: str):
         repository_to_response(repository)
         for repository in repositories
     ]
+
+
+async def get_repository_by_id(
+    repository_id: str,
+    user_id: str,
+):
+
+    repository = await repositories_collection.find_one(
+        {
+            "_id": ObjectId(repository_id),
+            "user_id": ObjectId(user_id),
+        }
+    )
+
+    if not repository:
+        raise HTTPException(
+            status_code=404,
+            detail="Repository not found",
+        )
+
+    return repository_to_response(repository)
+
+
+
+
+
+
+async def delete_repository(
+    repository_id: str,
+    user_id: str,
+):
+
+    result = await repositories_collection.delete_one(
+        {
+            "_id": ObjectId(repository_id),
+            "user_id": ObjectId(user_id),
+        }
+    )
+
+    if result.deleted_count == 0:
+        raise HTTPException(
+            status_code=404,
+            detail="Repository not found",
+        )
+
+    return {
+        "message": "Repository deleted successfully"
+    }
